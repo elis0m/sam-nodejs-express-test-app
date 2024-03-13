@@ -4,6 +4,7 @@ const router = express.Router()
 const bodyParser = require('body-parser')
 const cors = require('cors')
 const path = require('path')
+const { getCurrentInvoke } = require('@codegenie/serverless-express')
 
 let FruitBox = [];
 
@@ -47,6 +48,7 @@ router.post('/fruitbox', async (req, res) => {
         const item = { fruit: fruitName, qty : qty}
         FruitBox.push(item)
         result = FruitBox
+        console.log(req)
         res.status(200)
     }catch(e){
         console.log(e)
@@ -56,6 +58,14 @@ router.post('/fruitbox', async (req, res) => {
 
     res.send(result)
 
+})
+
+router.get('/error', async (req, res) => {
+    res.locals.message = "something"
+    res.locals.error = "smth"
+    
+    res.status = 500;
+    res.render('error', { fruitBox: FruitBox });
 })
 
 app.use('/', router)
